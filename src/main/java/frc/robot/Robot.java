@@ -10,10 +10,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.PWM;
-import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+
 
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -78,14 +75,15 @@ public class Robot extends TimedRobot {
     m_backLeftMotor.configure(m_backLeftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_frontRightMotor.configure(m_frontRightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_backRightMotor.configure(m_backRightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_intakeMotor.configure(m_intakeMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     // Followers (Replacment for motor controller groups)
     m_backLeftMotorConfig.follow(m_frontLeftMotor);
     m_backRightMotorConfig.follow(m_frontRightMotor);
 
 
     //inverts Right side of robot
-    m_frontRightMotorConfig.inverted(true);
-    m_backRightMotorConfig.inverted(true);
+    //m_frontRightMotorConfig.inverted(true);
+    //m_backRightMotorConfig.inverted(true);
 
     //initializes Controller Object
     m_Controller = new XboxController(0);
@@ -108,45 +106,177 @@ public class Robot extends TimedRobot {
     m_Timer.restart();
   }
   
-  /*
-   * Program that is ran when the robot is in "Autonomous Mode"
-   */
-  /* 
-  @Override
-  public void autonomousPeriodic() {
-    //Field Position A
+  
+   // Program that is ran when the robot is in "Autonomous Mode"
+  
+  //Methods for movements
+  public void turnLeft() {
+    m_robotDrive.tankDrive(-.5, .5);
+  }
+
+  public void turnRight() {
+    m_robotDrive.tankDrive(.5, -.5);
+  }
+
+  public void backUp() {
+    m_robotDrive.tankDrive(-.5,-.5);
+  }
+
+  public void goForward() {
+    m_robotDrive.tankDrive(.5, .5);
+  }
+
+  public void three_sixty_spin() {
+    m_robotDrive.tankDrive(-.5,.5);
+  }
+
+  //Method for intake motor
+  public void depositCoral() {
+    m_intakeMotor.set(1.0);
+  }
+
+  //Autonomous methods
+  public void auto_A() {
     //Set intake motor speed
     if (m_Timer.get() < 2.0) {
       m_intakeMotor.set(1.0);
     } 
     //Move to reef
     else if (m_Timer.get() >= 2.0 && m_Timer.get() < 5.0) {
-      m_robotDrive.tankDrive(0.5, 0.5);
-      m_robotDrive.
+      goForward();
     }
-    else if (m_Timer.get() >= 2.0 && m_Timer.get() < 5.0) {
-
+    else if (m_Timer.get() >= 5.0 && m_Timer.get() < 5.2) {
+      turnLeft();
+    }
+    else if (m_Timer.get() >= 5.2 && m_Timer.get() < 5.5) {
+      goForward();
     }
     //Deposit coral
-    //Move to driver station
-    {
-
+    else if (m_Timer.get() >= 5.5 && m_Timer.get() < 6.0) {
+      depositCoral();
     }
-
-    } else if (m_Timer.get() > 5.0 && m_Timer.get() < 9.0) 
-    {
-      //both motors reverse
-      
-      m_robotDrive.tankDrive(0.5, 0.5);
-    } 
-    
+    //Move to driver station
+    else if (m_Timer.get() >= 6.0 && m_Timer.get() < 7.0) {
+      backUp();
+    }
+    else if (m_Timer.get() >= 7.0 && m_Timer.get() < 7.3) {
+      turnRight();
+    }
+    else if (m_Timer.get() >= 7.3 && m_Timer.get() < 11) {
+      goForward();
+    }
+    else if (m_Timer.get() >= 11 && m_Timer.get() < 11.3) {
+      turnRight();
+    }
+    else if (m_Timer.get() >= 11.3 && m_Timer.get() < 12) {
+      goForward();
+    }
+    else if (m_Timer.get() >= 12 && m_Timer.get() < 13) {
+      three_sixty_spin();
+    }
     else {
       // stops all autonomous operations
       m_robotDrive.stopMotor();
       m_Timer.stop();
     }
   }
-  */
+  //Method for 
+  public void auto_B() {
+    //Set intake motor speed
+    if (m_Timer.get() < 2.0) {
+      m_intakeMotor.set(1.0);
+    } 
+    //Move to reef
+    else if (m_Timer.get() >= 2.0 && m_Timer.get() < 5.0) {
+      goForward();
+    }
+    else if (m_Timer.get() >= 5.0 && m_Timer.get() < 5.2) {
+      turnLeft();
+    }
+    else if (m_Timer.get() >= 5.2 && m_Timer.get() < 5.5) {
+      goForward();
+    }
+    //Deposit coral
+    else if (m_Timer.get() >= 5.5 && m_Timer.get() < 6.0) {
+      depositCoral();
+    }
+    //Move to driver station
+    else if (m_Timer.get() >= 6.0 && m_Timer.get() < 7.0) {
+      backUp();
+    }
+    else if (m_Timer.get() >= 7.0 && m_Timer.get() < 7.3) {
+      turnRight();
+    }
+    else if (m_Timer.get() >= 7.3 && m_Timer.get() < 11) {
+      goForward();
+    }
+    else if (m_Timer.get() >= 11 && m_Timer.get() < 11.3) {
+      turnRight();
+    }
+    else if (m_Timer.get() >= 11.3 && m_Timer.get() < 12) {
+      goForward();
+    }
+    else if (m_Timer.get() >= 12 && m_Timer.get() < 13) {
+      three_sixty_spin();
+    }
+    else {
+      // stops all autonomous operations
+      m_robotDrive.stopMotor();
+      m_Timer.stop();
+    }
+  }
+  public void auto_C() {
+    //Set intake motor speed
+    if (m_Timer.get() < 2.0) {
+      m_intakeMotor.set(1.0);
+    } 
+    //Move to reef
+    else if (m_Timer.get() >= 2.0 && m_Timer.get() < 5.0) {
+      goForward();
+    }
+    else if (m_Timer.get() >= 5.0 && m_Timer.get() < 5.2) {
+      turnRight();
+    }
+    else if (m_Timer.get() >= 5.2 && m_Timer.get() < 5.5) {
+      goForward();
+    }
+    //Deposit coral
+    else if (m_Timer.get() >= 5.5 && m_Timer.get() < 6.0) {
+      depositCoral();
+    }
+    //Move to driver station
+    else if (m_Timer.get() >= 6.0 && m_Timer.get() < 7.0) {
+      backUp();
+    }
+    else if (m_Timer.get() >= 7.0 && m_Timer.get() < 7.3) {
+      turnLeft();
+    }
+    else if (m_Timer.get() >= 7.3 && m_Timer.get() < 11) {
+      goForward();
+    }
+    else if (m_Timer.get() >= 11 && m_Timer.get() < 11.3) {
+      turnLeft();
+    }
+    else if (m_Timer.get() >= 11.3 && m_Timer.get() < 12) {
+      goForward();
+    }
+    else if (m_Timer.get() >= 12 && m_Timer.get() < 13) {
+      three_sixty_spin();
+    }
+    else {
+      // stops all autonomous operations
+      m_robotDrive.stopMotor();
+      m_Timer.stop();
+    }
+  }
+   
+  @Override
+  public void autonomousPeriodic() {
+    //choose A, B, or C based upon starting position
+    auto_A();
+    
+  }
+  
   /**
    * Program that is ran when robot is in "Teleoperated Mode"
    */
@@ -159,8 +289,7 @@ public class Robot extends TimedRobot {
     That means that the Y axis drives forward
     and backward, and the X turns left and right.
     */
-    if (m_Controller.getLeftY() != 0.0 || m_Controller.getRightX() != 0.0)
-    {
+    if (m_Controller.getLeftY() != 0.0 || m_Controller.getRightX() != 0.0){
       m_robotDrive.arcadeDrive(m_Controller.getLeftY(), m_Controller.getRightX());
     }
     /**
@@ -169,39 +298,17 @@ public class Robot extends TimedRobot {
      * left bumper for intake
      */
     
-    //Prepares top motor for firing
-    /* 
+    //Prepares intake motor for firing
+    
     if (m_Controller.getBButtonPressed() == true)
     {
-      m_topLaunchMotor.set(1.0);
+      depositCoral();
     } 
-    */
+    
     /*
     else if (m_Controller.getBButtonReleased() == true) 
     {
       m_topLaunchMotor.stopMotor();
-    }
-    */
-    /* 
-    //activate bottom motor for active firing
-    if (m_Controller.getRightBumperPressed() == true)
-    {
-      m_bottomLaunchMotor.set(1.0);
-    } else if (m_Controller.getRightBumperReleased() == true) 
-    {
-      m_topLaunchMotor.stopMotor();
-      m_bottomLaunchMotor.stopMotor();
-    }
-
-    //if statement for Reciever
-    if (m_Controller.getLeftBumperPressed() == true)
-    {
-      m_topLaunchMotor.set(-0.5);
-      m_bottomLaunchMotor.set(-0.2);
-    } else if (m_Controller.getLeftBumperReleased() == true) 
-    {
-      m_topLaunchMotor.stopMotor();
-      m_bottomLaunchMotor.stopMotor();
     }
     */
   }
