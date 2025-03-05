@@ -188,13 +188,7 @@ public class Robot extends TimedRobot {
       m_intakeMotor.set(.05);
     } 
     //Move to reef
-    else if (m_Timer.get() >= 2.0 && m_Timer.get() < 5.0) {
-      goForward();
-    }
-    else if (m_Timer.get() >= 5.0 && m_Timer.get() < 5.2) {
-      turnLeft();
-    }
-    else if (m_Timer.get() >= 5.2 && m_Timer.get() < 5.5) {
+    else if (m_Timer.get() >= 2.0 && m_Timer.get() < 5.5) {
       goForward();
     }
     //Deposit coral
@@ -205,19 +199,22 @@ public class Robot extends TimedRobot {
     else if (m_Timer.get() >= 6.0 && m_Timer.get() < 7.0) {
       backUp();
     }
-    else if (m_Timer.get() >= 7.0 && m_Timer.get() < 7.3) {
+    else if (m_Timer.get() >= 7.0 && m_Timer.get() < 7.5) {
       turnRight();
     }
-    else if (m_Timer.get() >= 7.3 && m_Timer.get() < 11) {
+    else if (m_Timer.get() >= 7.5 && m_Timer.get() < 8) {
+      turnLeft();
+    }
+    else if (m_Timer.get() >= 8 && m_Timer.get() < 12) {
       goForward();
     }
-    else if (m_Timer.get() >= 11 && m_Timer.get() < 11.3) {
+    else if (m_Timer.get() >= 12 && m_Timer.get() < 12.3) {
       turnRight();
     }
-    else if (m_Timer.get() >= 11.3 && m_Timer.get() < 12) {
+    else if (m_Timer.get() >= 12.3 && m_Timer.get() < 13) {
       goForward();
     }
-    else if (m_Timer.get() >= 12 && m_Timer.get() < 13) {
+    else if (m_Timer.get() >= 13 && m_Timer.get() < 13.5) {
       three_sixty_spin();
     }
     else {
@@ -305,6 +302,10 @@ public class Robot extends TimedRobot {
     {
       m_intakeMotor.set(.05);
     } 
+
+    else {
+      m_intakeMotor.stopMotor();
+    }
     
     /*
     else if (m_Controller.getBButtonReleased() == true) 
