@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
+import java.util.Queue;
 
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -82,8 +83,8 @@ public class Robot extends TimedRobot {
 
 
     //inverts Right side of robot
-    //m_frontRightMotorConfig.inverted(true);
-    //m_backRightMotorConfig.inverted(true);
+    m_frontRightMotorConfig.inverted(true);
+   
 
     //initializes Controller Object
     m_Controller = new XboxController(0);
@@ -122,7 +123,7 @@ public class Robot extends TimedRobot {
     m_robotDrive.tankDrive(-.5,-.5);
   }
 
-  public void goForward() {
+  public void goForward() { 
     m_robotDrive.tankDrive(.5, .5);
   }
 
@@ -132,14 +133,14 @@ public class Robot extends TimedRobot {
 
   //Method for intake motor
   public void depositCoral() {
-    m_intakeMotor.set(1.0);
+    m_intakeMotor.set(.05);
   }
 
   //Autonomous methods
   public void auto_A() {
     //Set intake motor speed
     if (m_Timer.get() < 2.0) {
-      m_intakeMotor.set(1.0);
+      m_intakeMotor.set(.05);
     } 
     //Move to reef
     else if (m_Timer.get() >= 2.0 && m_Timer.get() < 5.0) {
@@ -184,7 +185,7 @@ public class Robot extends TimedRobot {
   public void auto_B() {
     //Set intake motor speed
     if (m_Timer.get() < 2.0) {
-      m_intakeMotor.set(1.0);
+      m_intakeMotor.set(.05);
     } 
     //Move to reef
     else if (m_Timer.get() >= 2.0 && m_Timer.get() < 5.0) {
@@ -228,7 +229,7 @@ public class Robot extends TimedRobot {
   public void auto_C() {
     //Set intake motor speed
     if (m_Timer.get() < 2.0) {
-      m_intakeMotor.set(1.0);
+      m_intakeMotor.set(.05);
     } 
     //Move to reef
     else if (m_Timer.get() >= 2.0 && m_Timer.get() < 5.0) {
@@ -302,7 +303,7 @@ public class Robot extends TimedRobot {
     
     if (m_Controller.getBButtonPressed() == true)
     {
-      depositCoral();
+      m_intakeMotor.set(.05);
     } 
     
     /*
