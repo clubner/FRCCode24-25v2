@@ -45,9 +45,14 @@ public class Robot extends TimedRobot {
   private final SparkMax m_intakeMotor = new SparkMax(3, MotorType.kBrushless);
   private final SparkMaxConfig m_intakeMotorConfig = new SparkMaxConfig();
 
-
   //Constructs and initializes a Timer Object
   private final Timer m_Timer = new Timer();
+
+  //Creates a motor_timer variable
+
+  private int intake_on = -1;
+
+
   
   //constructs and initializes a differential drive object
   private final DifferentialDrive m_robotDrive 
@@ -131,48 +136,52 @@ public class Robot extends TimedRobot {
     m_robotDrive.tankDrive(-.5,.5);
   }
 
+  public void stayPut() {
+    m_robotDrive.tankDrive(0,0);
+  }
+
   //Method for intake motor
   public void depositCoral() {
-    m_intakeMotor.set(.05);
+    intake_on *= -1;
   }
 
   //Autonomous methods
   public void auto_A() {
-    //Set intake motor speed
-    if (m_Timer.get() < 2.0) {
-      m_intakeMotor.set(.05);
-    } 
     //Move to reef
-    else if (m_Timer.get() >= 2.0 && m_Timer.get() < 5.0) {
+    if (m_Timer.get() < 5.0) {
       goForward();
     }
-    else if (m_Timer.get() >= 5.0 && m_Timer.get() < 5.2) {
+    else if (m_Timer.get() < 5.2) {
       turnLeft();
     }
-    else if (m_Timer.get() >= 5.2 && m_Timer.get() < 5.5) {
+    else if (m_Timer.get() < 5.5) {
       goForward();
     }
     //Deposit coral
-    else if (m_Timer.get() >= 5.5 && m_Timer.get() < 6.0) {
-      depositCoral();
+    else if (m_Timer.get() < 6.0) {
+      m_intakeMotor.set(-.15);
+    }
+    //Stay put
+    else if (m_Timer.get() < 6.5) {
+      m_intakeMotor.set(0);
     }
     //Move to driver station
-    else if (m_Timer.get() >= 6.0 && m_Timer.get() < 7.0) {
+    else if (m_Timer.get() < 7.0) {
       backUp();
     }
-    else if (m_Timer.get() >= 7.0 && m_Timer.get() < 7.3) {
+    else if (m_Timer.get() < 7.3) {
       turnRight();
     }
-    else if (m_Timer.get() >= 7.3 && m_Timer.get() < 11) {
+    else if (m_Timer.get() < 11) {
       goForward();
     }
-    else if (m_Timer.get() >= 11 && m_Timer.get() < 11.3) {
+    else if (m_Timer.get() < 11.3) {
       turnRight();
     }
-    else if (m_Timer.get() >= 11.3 && m_Timer.get() < 12) {
+    else if (m_Timer.get() < 12) {
       goForward();
     }
-    else if (m_Timer.get() >= 12 && m_Timer.get() < 13) {
+    else if (m_Timer.get() < 13) {
       three_sixty_spin();
     }
     else {
@@ -183,38 +192,39 @@ public class Robot extends TimedRobot {
   }
   //Method for 
   public void auto_B() {
-    //Set intake motor speed
-    if (m_Timer.get() < 2.0) {
-      m_intakeMotor.set(.05);
-    } 
-    //Move to reef
-    else if (m_Timer.get() >= 2.0 && m_Timer.get() < 5.5) {
+    //Move forward
+    if (m_Timer.get() < 5.0) {
       goForward();
-    }
+    } 
     //Deposit coral
-    else if (m_Timer.get() >= 5.5 && m_Timer.get() < 6.0) {
+    //intake motor on
+    else if (m_Timer.get() == 5.0) {
+      depositCoral();
+    }
+    //stay put
+    else if (m_Timer.get() < 6.0) {
       depositCoral();
     }
     //Move to driver station
-    else if (m_Timer.get() >= 6.0 && m_Timer.get() < 7.0) {
+    else if (m_Timer.get() < 7.0) {
       backUp();
     }
-    else if (m_Timer.get() >= 7.0 && m_Timer.get() < 7.5) {
+    else if (m_Timer.get() < 7.5) {
       turnRight();
     }
-    else if (m_Timer.get() >= 7.5 && m_Timer.get() < 8) {
+    else if (m_Timer.get() < 8) {
       turnLeft();
     }
-    else if (m_Timer.get() >= 8 && m_Timer.get() < 12) {
+    else if (m_Timer.get() < 12) {
       goForward();
     }
-    else if (m_Timer.get() >= 12 && m_Timer.get() < 12.3) {
+    else if (m_Timer.get() < 12.3) {
       turnRight();
     }
-    else if (m_Timer.get() >= 12.3 && m_Timer.get() < 13) {
+    else if (m_Timer.get() < 13) {
       goForward();
     }
-    else if (m_Timer.get() >= 13 && m_Timer.get() < 13.5) {
+    else if (m_Timer.get() < 13.5) {
       three_sixty_spin();
     }
     else {
@@ -225,41 +235,42 @@ public class Robot extends TimedRobot {
   }
   public void auto_C() {
     //Set intake motor speed
-    if (m_Timer.get() < 2.0) {
-      m_intakeMotor.set(.05);
-    } 
-    //Move to reef
-    else if (m_Timer.get() >= 2.0 && m_Timer.get() < 5.0) {
-      goForward();
-    }
-    else if (m_Timer.get() >= 5.0 && m_Timer.get() < 5.2) {
-      turnRight();
-    }
-    else if (m_Timer.get() >= 5.2 && m_Timer.get() < 5.5) {
+    if (m_Timer.get() < 5.0) {
       goForward();
     }
     //Deposit coral
-    else if (m_Timer.get() >= 5.5 && m_Timer.get() < 6.0) {
+    else if (m_Timer.get() < 6.0) {
       depositCoral();
     }
     //Move to driver station
-    else if (m_Timer.get() >= 6.0 && m_Timer.get() < 7.0) {
+    else if (m_Timer.get() < 7.0) {
       backUp();
     }
-    else if (m_Timer.get() >= 7.0 && m_Timer.get() < 7.3) {
+    else if (m_Timer.get() < 7.3) {
       turnLeft();
     }
-    else if (m_Timer.get() >= 7.3 && m_Timer.get() < 11) {
+    else if (m_Timer.get() < 11) {
       goForward();
     }
-    else if (m_Timer.get() >= 11 && m_Timer.get() < 11.3) {
+    else if (m_Timer.get() < 11.3) {
       turnLeft();
     }
-    else if (m_Timer.get() >= 11.3 && m_Timer.get() < 12) {
+    else if (m_Timer.get() < 12) {
       goForward();
     }
-    else if (m_Timer.get() >= 12 && m_Timer.get() < 13) {
+    else if (m_Timer.get() < 13) {
       three_sixty_spin();
+    }
+    else {
+      // stops all autonomous operations
+      m_robotDrive.stopMotor();
+      m_Timer.stop();
+    }
+  }
+  //Stay out of the way
+  public void auto_D() {
+    if (m_Timer.get() < 2) {
+      goForward();
     }
     else {
       // stops all autonomous operations
@@ -270,6 +281,8 @@ public class Robot extends TimedRobot {
    
   @Override
   public void autonomousPeriodic() {
+
+    
     //choose A, B, or C based upon starting position
     auto_A();
     
@@ -288,7 +301,7 @@ public class Robot extends TimedRobot {
     and backward, and the X turns left and right.
     */
     if (m_Controller.getLeftY() != 0.0 || m_Controller.getRightX() != 0.0){
-      m_robotDrive.arcadeDrive(m_Controller.getLeftY(), m_Controller.getRightX());
+      m_robotDrive.arcadeDrive(-m_Controller.getRightX(), m_Controller.getLeftY());
     }
     /**
      * B button for top motor warm-up
@@ -296,15 +309,16 @@ public class Robot extends TimedRobot {
      * left bumper for intake
      */
     
-    //Prepares intake motor for firing
+    //Fires intake motor
     
-    if (m_Controller.getBButtonPressed() == true)
-    {
-      m_intakeMotor.set(.05);
-    } 
-
+    if (m_Controller.getBButtonPressed() == true) {
+      intake_on *= -1;
+    }
+    if (intake_on == 1) {
+      m_intakeMotor.set(-.15);
+    }
     else {
-      m_intakeMotor.stopMotor();
+      m_intakeMotor.set(0);
     }
     
     /*
