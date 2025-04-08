@@ -77,14 +77,17 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     //Configurations
+    m_frontLeftMotorConfig.openLoopRampRate(.25);
+    m_frontRightMotorConfig.openLoopRampRate(.25);
+    m_backLeftMotorConfig.follow(m_frontLeftMotor);
+    m_backRightMotorConfig.follow(m_frontRightMotor);
     m_frontLeftMotor.configure(m_frontLeftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_backLeftMotor.configure(m_backLeftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_frontRightMotor.configure(m_frontRightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_backRightMotor.configure(m_backRightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_intakeMotor.configure(m_intakeMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     // Followers (Replacment for motor controller groups)
-    m_backLeftMotorConfig.follow(m_frontLeftMotor);
-    m_backRightMotorConfig.follow(m_frontRightMotor);
+    
 
 
     //inverts Right side of robot
@@ -93,6 +96,7 @@ public class Robot extends TimedRobot {
 
     //initializes Controller Object
     m_Controller = new XboxController(0);
+
 
   
 
@@ -117,11 +121,11 @@ public class Robot extends TimedRobot {
   
   //Methods for movements
   public void turnLeft() {
-    m_robotDrive.tankDrive(-.5, .5);
+    m_robotDrive.tankDrive(.5, .5);
   }
 
   public void turnRight() {
-    m_robotDrive.tankDrive(.5, -.5);
+    m_robotDrive.tankDrive(-.5, -.5);
   }
 
   public void backUp() {
@@ -129,7 +133,7 @@ public class Robot extends TimedRobot {
   }
 
   public void goForward() { 
-    m_robotDrive.tankDrive(.5, .5);
+    m_robotDrive.tankDrive(-.5, .5);
   }
 
   public void three_sixty_spin() {
@@ -159,7 +163,7 @@ public class Robot extends TimedRobot {
     }
     //Deposit coral
     else if (m_Timer.get() < 6.0) {
-      m_intakeMotor.set(-.15);
+      m_intakeMotor.set(-.25);
     }
     //Stay put
     else if (m_Timer.get() < 6.5) {
@@ -267,11 +271,20 @@ public class Robot extends TimedRobot {
       m_Timer.stop();
     }
   }
-  //Stay out of the way
+  //Code we use......
   public void auto_D() {
-    if (m_Timer.get() < 2) {
+    if (m_Timer.get() < 5.0) {
       goForward();
     }
+    //Deposit coral
+    
+    else if (m_Timer.get() < 6.0) {
+      m_intakeMotor.set(-.25);    }
+    //Stay put
+    else if (m_Timer.get() < 8.0) {
+      m_intakeMotor.set(0);
+    }
+      
     else {
       // stops all autonomous operations
       m_robotDrive.stopMotor();
@@ -283,8 +296,8 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
 
     
-    //choose A, B, or C based upon starting position
-    auto_A();
+    //choose A, B, or C, or D based upon starting position
+    auto_D();
     
   }
   
@@ -315,7 +328,7 @@ public class Robot extends TimedRobot {
       intake_on *= -1;
     }
     if (intake_on == 1) {
-      m_intakeMotor.set(-.15);
+      m_intakeMotor.set(-.2);
     }
     else {
       m_intakeMotor.set(0);
